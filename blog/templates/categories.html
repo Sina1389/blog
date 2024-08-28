@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+{% if category_posts %}
+   <h1>{{ cats }}</h1>
+
+
+   {% for post in category_posts %}
+   <div class="card mt-2">
+      <div class="card-header">
+         {{ post.author }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.body | slice:":250 " | safe }} ...</p>
+        <a href="{% url 'article-detail' post.id %}" class="btn btn-primary">Read More</a>
+            {% if user.is_authenticated %}
+               <a class="btn btn-outline-secondary" href="{% url 'update_post' post.pk %}">
+                  <i class="bi bi-pencil-square"></i></a>
+               <a class="btn btn-outline-danger" href="{% url 'delete_post' post.pk %}">
+                  <i class="bi bi-trash"></i></a></p>
+            {% endif %}
+      </div>
+    </div>
+   {% endfor %}
+{% else %}
+    <h1>No post yet...</h1>
+{% endif %}
+{% endblock %}

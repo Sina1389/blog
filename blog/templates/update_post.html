@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Blog Post{% endblock %}
+
+{% block content %}
+<h1>Update Post ...</h1>
+{% if user.is_authenticated %}
+   {% if user.id == post.author.id %}
+   <div class="form-group">
+      <form method="POST">
+         {% csrf_token %}
+         {{  form.media }}
+         {{ form.as_p }}
+         <button class="btn btn-primary">Update</button>
+      </form>
+   </div>
+   {% else %}
+   <div>
+      <p>You dont have permited for edit this post ... </p>
+   </div>
+   {% endif %}
+{% else %}
+<div>
+   <p>You will must authenticated first and then edit post</p>
+</div>
+{% endif %}
+{% endblock %}

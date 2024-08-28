@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} User Profile {% endblock %}
+
+{% block content %}
+   <div class="card mb-3" style="max-width: 2160px;">
+      <div class="row g-0">
+      <div class="col-md-4">
+         <img src="{{ page_user.profile_pic.url }}" class="img-fluid rounded-start" alt="...">
+         <h2 style="color: purple;">{% firstof page_user.user.get_full_name page_user.user.username %}</h2>
+         {{page_user.bio}}
+         <br> </br>
+         <a href="{{ post.author.profile.website_url }}"><i class= "bi bi-globe2"></i></a> |
+         <a href="{{ post.author.profile.youtube_url }}"><i class="bi bi-youtube"></i></a> |
+         <a href="{{ post.author.profile.twitter_url }}"><i class="bi bi-twitter"></i></a> |
+         <a href="{{ post.author.profile.instagram_url }}"><i class="bi bi-instagram"></i></a>
+      </div>
+      <div class="col-md-8">
+         <div class="card-body">
+            </h5 class="card-title">{% firstof post.author.get_full_name post.author.username %}</h5>
+            <p class="card-text">{{ post.author.profile.bio }}</p>
+            <p class="card-text">
+               <small class="text-body-secondary">
+                  {% if post.author.profile.website_url %}
+
+                  <a href="{{ post.author.profile.website_url }}"><i class= "bi bi-globe2"></i></a> |
+                  {% endif %}
+                  {% if post.author.profile.website_url %}
+                  <a href="{{ post.author.profile.youtube_url }}"><i class="bi bi-youtube"></i></a> |
+                  {% endif %}
+                  {% if post.author.profile.website_url %}
+                  <a href="{{ post.author.profile.twitter_url }}"><i class="bi bi-twitter"></i></a> |
+                  {% endif %}
+                  {% if post.author.profile.website_url%}
+                  <a href="{{ post.author.profile.instagram_url }}"><i class="bi bi-instagram"></i></a>
+                  {% endif %}
+               </small>
+            </p>
+         </div>
+      </div>
+      </div>
+   </div>
+{% endblock %}

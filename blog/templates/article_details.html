@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title_tag }}{% endblock %}
+{% block content %}
+current user: {{ user.id }}
+<h1>{{ post.title }} - {{ post.author.id }}</h1>
+<small>By : {{ post.author.first_name }} {{ post.author.last_name }}</small>
+<p>{{ post.post_date }}</p>
+<br>
+{% if post.header %}
+   <img src="{{ post.header_image.url }}" alt="{{ post.title }}">
+{% endif %}
+
+<hr>
+<p>{{ post.body | safe }}</p>
+<br><br>
+<a href="{% url 'home' %}">Back to home</a>
+
+
+<br><br>
+<hr>
+<form action="{% url 'Like_post' post.pk %}" method="POST">
+   {% csrf_token %}
+   {% if user.is_authenticated %}
+      {% if liked %}
+      <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-danger-outline btn-sm"><i class="bi bi-star-fill"></i></button>
+      {% else %}  
+      <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary-outline btn-sm"><i class="bi bi-star"></i></button>
+      {% endif %}
+   {% else %}
+   <div>
+      <p>{you will must authenticated first and then like the post}</p>
+   </div>
+
+   {% endif %}
+   {{ total_likes }} Likes
+</form>
+
+<div class="card mb-3" style="max-width: 540px;">
+   <div class="row g-0">
+     <div class="col-md-4">
+       <img src="{{ post.author.profile.profile_pic.url }}" class="img-fluid rounded-start" alt="...">
+     </div>
+     <div class="col-md-8">
+       <div class="card-body">
+
+
+         {% if post.author.profile %}
+         <a href="{% url 'show_profile_page' post.author.profile.id %}">
+         <h5 class="card-title">{% firstof post.author.get_full_name post.author.username %}</h5>
+         </a>
+         {% else %}
+         <h5 class="card-title">{% firstof post.author.get_full_name post.author.username %}</h5>
+         {% endif %}
+
+
+
+         <p class="card-text">{{ post.author.profile.bio }}</p>
+         <p class="card-text">
+            <small class="text-body-secondary">
+               {% if post.author.profile.website_url %}
+
+               <a href="{{ post.author.profile.website_url }}"><i class= "bi bi-globe2"></i></a> |
+               {% endif %}
+               {% if post.author.profile.website_url %}
+               <a href="{{ post.author.profile.youtube_url }}"><i class="bi bi-youtube"></i></a> |
+               {% endif %}
+               {% if post.author.profile.website_url %}
+               <a href="{{ post.author.profile.twitter_url }}"><i class="bi bi-twitter"></i></a> |
+               {% endif %}
+               {% if post.author.profile.website_url%}
+               <a href="{{ post.author.profile.instagram_url }}"><i class="bi bi-instagram"></i></a>
+               {% endif %}
+            </small>
+         </p>
+       </div>
+     </div>
+   </div>
+ </div>
+
+ <hr>
+ <h3>Comments... </h3>
+ <a href="{% url 'add_comment' post.pk %}">Add Comments</a>
+ <br>
+ {% if not post.comments.all %}
+   <p>Not Comment Yet ... </p>
+ {% else %}
+   {% for comment in post.comments.all %}
+      <div class="list-group">
+         <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+         <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ comment.name }}</h5>
+            <small>{{ comment.date_added }}</small>
+         </div>
+         <p class="mb-1">{{ comment.body }}</p>
+         </a>
+      </div>
+   {% endfor %}
+ {% endif %}
+ <br>
+<a href="{% url 'add_comment' post.pk %}">Add Comments</a>
+{% endblock %}
+
+
